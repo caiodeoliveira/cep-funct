@@ -1,33 +1,26 @@
-import React from 'react'
+import { useState } from 'react';
 import './App.css';
 
-class App extends React.Component{
-  state = {
-    cep: {}
-  }
-  handleTextChange(e) {
+function App(props) {
+  const [cep, setCep] = useState({})
+
+  function handleTextChange(e) {
     fetch(`https://viacep.com.br/ws/${e.target.value}/json/`)
     .then(res => res.json())
-    .then(res => {
-      this.setState({
-        cep: res
-      })
-    })
+    .then(res => setCep(res))
   }
 
-  render() {
-    return (
+  return (
+    <div>
+      <strong>Olá, {props.name}</strong>
       <div>
-        <strong>Olá, {this.props.name}</strong>
-        <div>
-          Digite o cep: <input type="text" onChange={this.handleTextChange.bind(this)}/>
-          {Object.entries(this.state.cep).map((values, keys) => (
-            <h2 key={keys}><strong>{values[0]}</strong>{values[1]}</h2>
-          ))}
-        </div>
+        Digite o cep: <input type="text" onChange={handleTextChange}/>
+        {Object.entries(cep).map((values, keys) => (
+          <h2 key={keys}><strong>{values[0]}</strong>{values[1]}</h2>
+        ))}
       </div>
+    </div>
     )
   }
-}
 
 export default App;
